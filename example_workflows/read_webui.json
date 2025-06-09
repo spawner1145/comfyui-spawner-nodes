@@ -1,0 +1,421 @@
+{
+  "id": "4769c016-029b-4365-a18d-1416050e8a21",
+  "revision": 0,
+  "last_node_id": 20,
+  "last_link_id": 19,
+  "nodes": [
+    {
+      "id": 13,
+      "type": "json_process",
+      "pos": [
+        1112.2646484375,
+        -984.934326171875
+      ],
+      "size": [
+        270,
+        190
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "json_data",
+          "type": "STRING",
+          "link": 14
+        }
+      ],
+      "outputs": [
+        {
+          "name": "value_1",
+          "type": "STRING",
+          "links": [
+            15
+          ]
+        },
+        {
+          "name": "value_2",
+          "type": "STRING",
+          "links": [
+            16
+          ]
+        },
+        {
+          "name": "value_3",
+          "type": "STRING",
+          "links": [
+            17
+          ]
+        },
+        {
+          "name": "value_4",
+          "type": "STRING",
+          "links": [
+            18
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "json_process"
+      },
+      "widgets_values": [
+        "width",
+        "height",
+        "png_text.parameters",
+        "png_text.chara"
+      ]
+    },
+    {
+      "id": 3,
+      "type": "easy showAnything",
+      "pos": [
+        864.0440673828125,
+        -915.8778076171875
+      ],
+      "size": [
+        503.2116394042969,
+        495.4450378417969
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 13
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": [
+            14
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-easy-use",
+        "ver": "71c7865d2d3c934ccb99f24171e08ae5a81148ac",
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "{\n    \"filename\": \"00001-2017129057.png\",\n    \"width\": 1024,\n    \"height\": 1536,\n    \"exif\": \"No EXIF metadata found.\",\n    \"png_text\": {\n        \"parameters\": \"rating:general,best quality,very aesthetic,absurdres,\\nNegative prompt: blurry,lowres,error,film grain,scan artifacts,worst quality,bad quality,jpeg artifacts,very displeasing,chromatic aberration,logo,dated,signature,multiple views,gigantic breasts,\\nSteps: 15, Sampler: Restart, Schedule type: Align Your Steps, CFG scale: 7, Seed: 2017129057, Size: 1024x1536, Model: miaomiaoHarem_v14, Clip skip: 2, RNG: CPU, Version: f1.6.5dev2-v1.10.1RC-latest-2256-g45da87f1\"\n    }\n}"
+      ]
+    },
+    {
+      "id": 15,
+      "type": "easy showAnything",
+      "pos": [
+        1186.71142578125,
+        -1132.69580078125
+      ],
+      "size": [
+        264.2267150878906,
+        88
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 16
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-easy-use",
+        "ver": "71c7865d2d3c934ccb99f24171e08ae5a81148ac",
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "1536"
+      ]
+    },
+    {
+      "id": 17,
+      "type": "TextEncoderDecoder",
+      "pos": [
+        1453.34765625,
+        -1121.4263916015625
+      ],
+      "size": [
+        400,
+        208
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "widget": {
+            "name": "text"
+          },
+          "link": 18
+        }
+      ],
+      "outputs": [
+        {
+          "name": "result_text",
+          "type": "STRING",
+          "links": [
+            19
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "TextEncoderDecoder"
+      },
+      "widgets_values": [
+        "",
+        "解码 (Decode)",
+        "Base64",
+        "gbk",
+        "gbk",
+        "utf-8"
+      ]
+    },
+    {
+      "id": 18,
+      "type": "easy showAnything",
+      "pos": [
+        1422.4736328125,
+        -839.6724243164062
+      ],
+      "size": [
+        567.5332641601562,
+        403.5066833496094
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 19
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-easy-use",
+        "ver": "71c7865d2d3c934ccb99f24171e08ae5a81148ac",
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "处理错误: Invalid base64-encoded string: number of data characters (5) cannot be 1 more than a multiple of 4"
+      ]
+    },
+    {
+      "id": 14,
+      "type": "easy showAnything",
+      "pos": [
+        1182.437255859375,
+        -1031.15380859375
+      ],
+      "size": [
+        210,
+        96.40868377685547
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 15
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-easy-use",
+        "ver": "71c7865d2d3c934ccb99f24171e08ae5a81148ac",
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "1024"
+      ]
+    },
+    {
+      "id": 12,
+      "type": "ImageMetadataReader",
+      "pos": [
+        810.1859130859375,
+        -841.0926513671875
+      ],
+      "size": [
+        270,
+        294
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "metadata_json",
+          "type": "STRING",
+          "links": [
+            13
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageMetadataReader"
+      },
+      "widgets_values": [
+        "00001-2017129057.png",
+        "image"
+      ]
+    },
+    {
+      "id": 16,
+      "type": "easy showAnything",
+      "pos": [
+        1407.92236328125,
+        -783.980712890625
+      ],
+      "size": [
+        393.77728271484375,
+        165.6207275390625
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 17
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-easy-use",
+        "ver": "71c7865d2d3c934ccb99f24171e08ae5a81148ac",
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "rating:general,best quality,very aesthetic,absurdres,\nNegative prompt: blurry,lowres,error,film grain,scan artifacts,worst quality,bad quality,jpeg artifacts,very displeasing,chromatic aberration,logo,dated,signature,multiple views,gigantic breasts,\nSteps: 15, Sampler: Restart, Schedule type: Align Your Steps, CFG scale: 7, Seed: 2017129057, Size: 1024x1536, Model: miaomiaoHarem_v14, Clip skip: 2, RNG: CPU, Version: f1.6.5dev2-v1.10.1RC-latest-2256-g45da87f1"
+      ]
+    }
+  ],
+  "links": [
+    [
+      13,
+      12,
+      0,
+      3,
+      0,
+      "*"
+    ],
+    [
+      14,
+      3,
+      0,
+      13,
+      0,
+      "STRING"
+    ],
+    [
+      15,
+      13,
+      0,
+      14,
+      0,
+      "*"
+    ],
+    [
+      16,
+      13,
+      1,
+      15,
+      0,
+      "*"
+    ],
+    [
+      17,
+      13,
+      2,
+      16,
+      0,
+      "*"
+    ],
+    [
+      18,
+      13,
+      3,
+      17,
+      0,
+      "STRING"
+    ],
+    [
+      19,
+      17,
+      0,
+      18,
+      0,
+      "*"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.1,
+      "offset": [
+        -690.9666861586797,
+        1207.9354412337645
+      ]
+    },
+    "frontendVersion": "1.21.7"
+  },
+  "version": 0.4
+}

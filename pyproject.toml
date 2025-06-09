@@ -1,0 +1,16 @@
+[project]
+name = "spawner-nodes"
+description = ""
+version = "1.0.0"
+license = {file = "LICENSE"}
+dependencies = ["piexif", "pypng"]
+
+[project.urls]
+Repository = "https://github.com/spawner1145/comfyui-spawner-nodes"
+#  Used by Comfy Registry https://registry.comfy.org
+
+[tool.comfy]
+PublisherId = "spawner"
+DisplayName = "comfyui-spawner-nodes"
+Icon = ""
+includes = []
