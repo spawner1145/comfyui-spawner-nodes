@@ -7,10 +7,21 @@ class ConditioningInspector:
     def INPUT_TYPES(cls):
         return {"required": {"conditioning": ("CONDITIONING",)}}
 
-    RETURN_TYPES = ("TENSOR", "TENSOR", "*") 
-    RETURN_NAMES = ("cond_tensor", "pooled_tensor", "details_dict")
+    RETURN_TYPES = ("TENSOR", "TENSOR", "DICT", "STRING") 
+    RETURN_NAMES = ("cond_tensor", "pooled_tensor", "details_dict", "nested_keys")
     FUNCTION = "inspect"
     CATEGORY = "spawner/conditioning"
+
+    def _get_nested_keys(self, data, parent_key='', sep='.'):
+        keys = []
+        if isinstance(data, dict):
+            for k, v in data.items():
+                new_key = f"{parent_key}{sep}{k}" if parent_key else k
+                if isinstance(v, dict):
+                    keys.extend(self._get_nested_keys(v, new_key, sep))
+                else:
+                    keys.append(new_key)
+        return keys
 
     def inspect(self, conditioning):
         if not isinstance(conditioning, list) or len(conditioning) == 0:
@@ -18,6 +29,9 @@ class ConditioningInspector:
         
         cond_tensor = conditioning[0][0]
         details_dict = conditioning[0][1].copy()
+
+        nested_keys_list = self._get_nested_keys(details_dict)
+        nested_keys_str = "\n".join(nested_keys_list)
 
         pooled_tensor = details_dict.get("pooled_output", None)
 
@@ -27,9 +41,7 @@ class ConditioningInspector:
             else:
                 pooled_tensor = torch.zeros_like(cond_tensor)
         
-        num_tokens = details_dict.get("num_tokens", 0)
-
-        return (cond_tensor, pooled_tensor, details_dict)
+        return (cond_tensor, pooled_tensor, details_dict, nested_keys_str)
 
 class TensorInspector:
     @classmethod
