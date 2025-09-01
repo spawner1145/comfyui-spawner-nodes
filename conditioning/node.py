@@ -330,34 +330,56 @@ class TensorConcatenation:
                 "tensor1": ("TENSOR",),
                 "tensor2": ("TENSOR",),
                 "dim": ("INT", {"default": 1, "min": -10, "max": 10}),
+            },
+            "optional": {
+                "enable_debug": ("BOOLEAN", {"default": False}),
             }
         }
-    RETURN_TYPES = ("TENSOR",)
-    RETURN_NAMES = ("concatenated_tensor",)
+    RETURN_TYPES = ("TENSOR", "STRING")
+    RETURN_NAMES = ("concatenated_tensor", "debug_info")
     FUNCTION = "concatenate"
     CATEGORY = "spawner/tensor"
 
-    def concatenate(self, tensor1, tensor2, dim):
+    def concatenate(self, tensor1, tensor2, dim, enable_debug=False):
         def normalize_dim(dim, tensor):
             if dim < 0:
                 return len(tensor.shape) + dim
             return dim
 
+        tensor1 = tensor1.contiguous()
+        tensor2 = tensor2.contiguous()
+
         normalized_dim = normalize_dim(dim, tensor1)
         if normalized_dim < 0 or normalized_dim >= len(tensor1.shape):
-            raise ValueError(f"维度 {dim} 对于形状 {tensor1.shape} 无效")
+            raise ValueError(f"维度 {dim}（标准化后 {normalized_dim}）对于形状 {tensor1.shape} 无效")
             
         if len(tensor1.shape) != len(tensor2.shape):
-            raise ValueError(f"张量维度不匹配: {len(tensor1.shape)} vs {len(tensor2.shape)}")
+            raise ValueError(f"张量维度数量不匹配: {len(tensor1.shape)} vs {len(tensor2.shape)}")
 
         for i in range(len(tensor1.shape)):
             if i != normalized_dim and tensor1.shape[i] != tensor2.shape[i]:
-                raise ValueError(f"维度 {i} 不匹配: {tensor1.shape[i]} vs {tensor2.shape[i]}")
+                raise ValueError(f"维度 {i} 大小不匹配: {tensor1.shape[i]} vs {tensor2.shape[i]}")
                 
         if tensor1.device != tensor2.device:
-            tensor2 = tensor2.to(tensor1.device)
+            tensor2 = tensor2.to(tensor1.device, non_blocking=True)
             
-        return (torch.cat([tensor1, tensor2], dim=normalized_dim),)
+        concatenated = torch.cat([tensor1, tensor2], dim=normalized_dim)
+        
+        debug_info = ""
+        if enable_debug:
+            reversed_concat = torch.cat([tensor2, tensor1], dim=normalized_dim)
+            order_sensitivity = torch.norm(concatenated - reversed_concat).item()
+            
+            debug_info = (
+                f"拼接详情:\n"
+                f"- 拼接维度: {dim}（标准化后: {normalized_dim}\n"
+                f"- tensor1形状: {tensor1.shape}（设备: {tensor1.device}\n"
+                f"- tensor2形状: {tensor2.shape}（设备: {tensor2.device}\n"
+                f"- 拼接后形状: {concatenated.shape}\n"
+                f"- 顺序敏感性（差异范数）: {order_sensitivity:.6f}"
+            )
+        
+        return (concatenated, debug_info)
 
 class TensorPooledMerge:
     @classmethod
@@ -458,15 +480,17 @@ class TensorAttentionFusion:
             raise ValueError("tensor1和tensor2必须是3维张量 [batch_size, seq_len, hidden_dim]")
         if tensor1.shape[0] != tensor2.shape[0]:
             raise ValueError(f"tensor1和tensor2的batch_size不匹配: {tensor1.shape[0]} vs {tensor2.shape[0]}")
-        
+        if tensor1.shape[1] != tensor2.shape[1]:
+            print(f"提示：tensor1的seq_len={tensor1.shape[1]}，tensor2的seq_len={tensor2.shape[1]}，融合后seq_len={tensor1.shape[1]+tensor2.shape[1]}")
+
         if tensor1.shape[-1] != tensor2.shape[-1]:
             adapter = TensorShapeAdapter()
             tensor2 = adapter.shape_adapt(tensor2, tensor1)[0]
-        
+
         embedding_dim = tensor1.shape[-1]
         if embedding_dim % n_heads != 0:
             raise ValueError(f"嵌入维度 ({embedding_dim}) 必须能被注意力头数量 ({n_heads}) 整除")
-        
+
         device = tensor1.device
         dtype = tensor1.dtype
         attention = nn.MultiheadAttention(
@@ -474,16 +498,12 @@ class TensorAttentionFusion:
             num_heads=n_heads,
             batch_first=True
         ).to(device, dtype=dtype)
-        
+
         combined = torch.cat([tensor1, tensor2], dim=1)
         attn_output, _ = attention(query=combined, key=combined, value=combined)
-        attn_output = attn_output / temperature
-        
-        seq_len1 = tensor1.shape[1]
-        fused_part1 = attn_output[:, :seq_len1, :]
-        fused_part2 = attn_output[:, seq_len1:, :]
-        
-        fused_tensor = (fused_part1 + fused_part2) / 2
+        fused_tensor = attn_output / temperature
+
+        fused_tensor = fused_tensor.view([int(dim) for dim in fused_tensor.shape])
         return (fused_tensor,)
 
 class TensorCrossAttention:
