@@ -88,6 +88,9 @@ class XMLJSONConverter:
             "required": {
                 "text": ("STRING", {"multiline": True, "default": ""}),
                 "conversion_mode": (["xml_to_json", "json_to_xml"],),
+            },
+            "optional": {
+                "xml_root_name": ("STRING", {"default": "elements"}),
             }
         }
 
@@ -96,9 +99,11 @@ class XMLJSONConverter:
     FUNCTION = "convert"
     CATEGORY = "spawner/utils"
 
-    def convert(self, text: str, conversion_mode: str):
+    def convert(self, text: str, conversion_mode: str, xml_root_name: str = "root"):
         if not text.strip():
             return ("",)
+        if not xml_root_name:
+            xml_root_name = "root"
 
         try:
             if conversion_mode == "xml_to_json":
@@ -108,6 +113,8 @@ class XMLJSONConverter:
             
             elif conversion_mode == "json_to_xml":
                 py_dict = json.loads(text)
+                if not isinstance(py_dict, dict) or len(py_dict.keys()) != 1:
+                    py_dict = {xml_root_name: py_dict}
                 xml_string = xmltodict.unparse(py_dict, pretty=True)
                 return (xml_string,)
 
