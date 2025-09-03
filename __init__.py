@@ -1,6 +1,6 @@
 from .utils.read_meta import ImageMetadataReader
 from .utils.json_process import json_process
-from .utils.text_process import TextEncoderDecoder
+from .utils.text_process import TextEncoderDecoder, XMLJSONConverter
 from .conditioning.node import ConditioningInspector, TensorInspector, ConditioningPacker, ConditioningCrossAttention, TensorShapeAdapter, ConditioningConcatenation, ConditioningPooledMerge, TensorConcatenation, TensorPooledMerge, TensorAttentionFusion, TensorCrossAttention, AllOnesMaskGenerator, TensorUnsqueeze
 from .conditioning.data import SaveTrainingDataPair
 
@@ -8,6 +8,7 @@ NODE_CLASS_MAPPINGS = {
     "ImageMetadataReader": ImageMetadataReader,
     "json_process": json_process,
     "TextEncoderDecoder": TextEncoderDecoder,
+    "XMLJSONConverter": XMLJSONConverter,
 
     "ConditioningInspector": ConditioningInspector,
     "TensorInspector": TensorInspector,
@@ -30,6 +31,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ImageMetadataReader": "Read Image Metadata",
     "json_process": "JSON process",
     "TextEncoderDecoder": "Text Encoder/Decoder",
+    "XMLJSONConverter": "XML/JSON 互转",
 
     "ConditioningInspector": "Conditioning 信息全览",
     "TensorInspector": "张量信息探针",
