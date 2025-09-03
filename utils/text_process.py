@@ -2,6 +2,7 @@ import base64
 import urllib.parse
 import codecs
 import json
+import xmltodict
 
 class TextEncoderDecoder:
     ENCODING_FORMATS = ["Base64", "URL (Percent-Encoding)", "Hex", "ROT13", "JSON String Escape", "字符集转换 (Character Set)"]
@@ -79,3 +80,37 @@ class TextEncoderDecoder:
                 print(f"TextEncoderDecoder Error (post-decoding): {e}")
 
         return (result,)
+
+class XMLJSONConverter:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "text": ("STRING", {"multiline": True, "default": ""}),
+                "conversion_mode": (["xml_to_json", "json_to_xml"],),
+            }
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("result_string",)
+    FUNCTION = "convert"
+    CATEGORY = "spawner/utils"
+
+    def convert(self, text: str, conversion_mode: str):
+        if not text.strip():
+            return ("",)
+
+        try:
+            if conversion_mode == "xml_to_json":
+                py_dict = xmltodict.parse(text)
+                json_string = json.dumps(py_dict, indent=4, ensure_ascii=False)
+                return (json_string,)
+            
+            elif conversion_mode == "json_to_xml":
+                py_dict = json.loads(text)
+                xml_string = xmltodict.unparse(py_dict, pretty=True)
+                return (xml_string,)
+
+        except Exception as e:
+            print(f"Error during conversion: {e}\nReturning original text.")
+            return (text,)
