@@ -1,9 +1,9 @@
 [project]
 name = "spawner-nodes"
 description = ""
-version = "1.0.0"
+version = "1.0.2"
 license = {file = "LICENSE"}
-dependencies = ["piexif", "pypng"]
+dependencies = ["piexif", "pypng", "xmltodict"]
 
 [project.urls]
 Repository = "https://github.com/spawner1145/comfyui-spawner-nodes"
